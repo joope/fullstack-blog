@@ -14,14 +14,36 @@ const totalLikes = (blogs) => {
 }
 
 const favoriteBlog = (blogs) => {
-    return blogs.reduce((prev, blog, index, array) => {
+    return blogs.reduce((acc, blog, index, array) => {
         if (index === 0 ) return blog;
-        return prev.likes < blog.likes ? blog : prev;
+        return acc.likes < blog.likes ? blog : acc;
     }, {})
+}
+
+const mostBlogs = (blogs) => {
+    const blogsByAuthor = blogs.reduce((acc, blog) => {
+        const authorBlogs = acc[blog.author];
+        if (authorBlogs) {
+            acc[blog.author] = authorBlogs + 1;
+        } else {
+            acc[blog.author] = 1;
+        }
+
+        if (!acc['mostBlogged'] || acc['mostBlogged'].blogs <= authorBlogs) {
+            acc['mostBlogged'] = {
+                author: blog.author,
+                blogs: acc[blog.author]
+            }
+        }
+        return acc;
+    }, {});
+    
+    return blogsByAuthor.mostBlogged;
 }
 
 module.exports = {
     dummy,
     totalLikes,
-    favoriteBlog
+    favoriteBlog,
+    mostBlogs
 }

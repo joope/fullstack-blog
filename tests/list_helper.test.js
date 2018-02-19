@@ -89,10 +89,28 @@ describe('favorite blog', () => {
   test('it should return the most liked blog', () => {
     const result = listHelper.favoriteBlog(manyBlogs);
     expect(result).toEqual(manyBlogs[2]);
-  });
+  })
 
   test('it should return the blog if there is only one', () => {
     const result = listHelper.favoriteBlog(singleBlog);
     expect(result).toEqual(singleBlog[0]);
+  })
+})
+
+describe('most blogs', () => {
+  test('should return the author with most blogs from given list', () => {
+    const result = listHelper.mostBlogs(manyBlogs);
+    expect(result).toEqual({
+      author: 'Robert C. Martin',
+      blogs: 3
+    })
+  })
+
+  test('it should return only blog if there is only one', () => {
+    const result = listHelper.mostBlogs(singleBlog);
+    expect(result).toEqual({
+      author: 'Michael Chan',
+      blogs: 1
+    });
   })
 })
