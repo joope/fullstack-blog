@@ -10,11 +10,16 @@ blogsRouter.get('/', (request, response) => {
   })
   
 blogsRouter.post('/', (request, response) => {
-    const { body } = request;
-    if (!body.likes) {
-      body.likes = 0;
+    const { title, author, url, likes=0 } = request.body;
+    if (!title && !url) {
+      return response.sendStatus(400);
     }
-    const blog = new Blog(body)
+    const blog = new Blog({
+      title,
+      author,
+      url,
+      likes
+    })
   
     blog
       .save()

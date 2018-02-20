@@ -58,7 +58,7 @@ describe('POST /api/blogs', () => {
             title: 'How I made your mother',
             author: 'Samuel Mikael Gabriel',
             url: 'http://asdasdasd.com',
-            likes: 0
+            likes: 2
         }
         const response = await api
             .post('/api/blogs')
@@ -83,6 +83,18 @@ describe('POST /api/blogs', () => {
             .expect(201)
         
         expect(response.body.likes).toEqual(0)
+    })
+
+    test('posted blog without title and url will fail', async () => {
+        const newBlog = {
+            author: 'Samuel Mikael Gabriel',
+        }
+        const response = await api
+            .post('/api/blogs')
+            .send(newBlog)
+            .expect(400)
+        
+        expect(response.body).toEqual({})
     })
 })
 
