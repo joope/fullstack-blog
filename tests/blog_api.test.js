@@ -35,19 +35,38 @@ beforeAll(async () => {
     await Blog.insertMany(initialBlogs);
 })
 
-test('blogs returned as json', async () => {
-    const blogs = await api.get('/api/blogs')
-    expect(blogs.ok);
+describe('GET /api/blogs', () => {
+    test('blogs returned as json', async () => {
+        const blogs = await api.get('/api/blogs')
+        expect(blogs.ok);
+    })
+    
+    test('blogs contains correct amount of documents', async () => {
+        const blogs = await api.get('/api/blogs')
+        expect(blogs.body.length).toBe(initialBlogs.length);
+    })
+    
+    test('blogs response contains correct blog', async () => {
+        const blogs = await api.get('/api/blogs')
+        expect(blogs.body[0]).toEqual(initialBlogs[0])
+    })
 })
 
-test('blogs contains correct amount of documents', async () => {
-    const blogs = await api.get('/api/blogs')
-    expect(blogs.body.length).toBe(initialBlogs.length);
-})
-
-test('blogs response contains correct blog', async () => {
-    const blogs = await api.get('/api/blogs')
-    expect(blogs.body[0]).toEqual(initialBlogs[0])
+describe('POST /api/blogs', () => {
+    test('valid blog can be posted', async () => {
+        const newBlog = {
+            title: 'How I made your mother',
+            author: 'Samuel Mikael Gabriel',
+            url: 'http://asdasdasd.com',
+            likes: 0
+        }
+        const response = await api
+            .post('/api/blogs')
+            .send(newBlog)
+            .expect(201)
+        
+        expect(response.body.title).toEqual(newBlog.title)
+    })
 })
 
 afterAll(() => {
