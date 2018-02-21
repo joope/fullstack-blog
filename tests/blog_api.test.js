@@ -94,6 +94,18 @@ describe('DELETE /api/blogs/<post-id>', () => {
         expect(blogsAfter).not.toContainEqual({_id: blogId});
         expect(blogsAfter.length).toBe(blogsBefore.length - 1);
     })
+
+    test('unvalid blog id returns a failure status from server', async () => {
+        const blogId = 'notValidId'
+        const blogsBefore = await blogsInDb();
+        const response = await api
+            .delete('/api/blogs/' + blogId)
+            .expect(400)
+
+        const blogsAfter = await blogsInDb();
+        expect(blogsAfter).not.toContainEqual({_id: blogId});
+        expect(blogsAfter.length).toBe(blogsBefore.length);
+    })
 })
 
 afterAll(() => {
