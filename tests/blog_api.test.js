@@ -2,7 +2,7 @@ const supertest = require('supertest')
 const { app, server } = require('../index')
 const api = supertest(app)
 const Blog = require('../models/blog')
-const { format, initialBlogs, nonExistingId, blogsInDb } = require('./test_helper');
+const { format, initialBlogs, existingId, blogsInDb } = require('./test_helper');
 
 beforeAll(async () => {
     await Blog.remove({});
@@ -40,7 +40,7 @@ describe('POST /api/blogs', () => {
             .post('/api/blogs')
             .send(newBlog)
             .expect(201)
-            
+
         const blogsAfter = await blogsInDb();
 
         expect(blogsAfter.length).toBe(blogsBefore.length + 1);
@@ -79,6 +79,20 @@ describe('POST /api/blogs', () => {
             .expect(400)
         
         expect(response.body).toEqual({})
+    })
+})
+
+describe('DELETE /api/blogs/<post-id>', () => {
+    test('deleted blog doesnt appear on blogs list', async () => {
+        const blogId = await existingId();
+        const blogsBefore = await blogsInDb();
+        const response = await api
+            .delete('/api/blogs/' + blogId)
+            .expect(204)
+
+        const blogsAfter = await blogsInDb();
+        expect(blogsAfter).not.toContainEqual({_id: blogId});
+        expect(blogsAfter.length).toBe(blogsBefore.length - 1);
     })
 })
 

@@ -35,10 +35,9 @@ const format = (blog) => ({
 });
 
 
-const nonExistingId = async () => {
+const existingId = async () => {
     const note = new Blog()
     await note.save()
-    await note.remove()
   
     return note._id.toString()
   }
@@ -49,5 +48,5 @@ const nonExistingId = async () => {
   }
   
   module.exports = {
-    initialBlogs, format, nonExistingId, blogsInDb
+    initialBlogs, format, existingId, blogsInDb
   }
