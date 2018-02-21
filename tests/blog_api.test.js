@@ -108,6 +108,20 @@ describe('DELETE /api/blogs/<post-id>', () => {
     })
 })
 
+describe('PUT /api/blogs/<post-id>', () => {
+    test('can update existing record', async () => {
+        const blog = initialBlogs[0];
+        blog.title = 'I like apples';
+        const res = await api
+            .put('/api/blogs/' + blog._id)
+            .send(blog)
+            .expect(200)
+        const blogsAfter = await blogsInDb();
+        expect(res.body).toEqual(blog);
+        expect(blogsAfter).toContainEqual(format(blog));
+    })
+})
+
 afterAll(() => {
     server.close()
 })
