@@ -4,7 +4,7 @@ const User = mongoose.model('User', {
     username: String,
     name: String,
     adult: Boolean,
-    password: String
+    passwordHash: {type: String, select: false}
   })
   
 module.exports = User

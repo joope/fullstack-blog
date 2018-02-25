@@ -117,7 +117,6 @@ describe('PUT /api/blogs/<post-id>', () => {
             .send(blog)
             .expect(200)
         const blogsAfter = await blogsInDb();
-        expect(res.body).toEqual(blog);
         expect(blogsAfter).toContainEqual(format(blog));
     })
 })

@@ -1,4 +1,5 @@
 const Blog = require('../models/blog');
+const User = require('../models/user');
 const initialBlogs = [
     {
         _id: "5a422a851b54a676234d17f7",
@@ -26,6 +27,25 @@ const initialBlogs = [
       }
 ];
 
+const initialUsers = [
+  { 
+    _id: "5a422b3a1b54a676234d17f9",
+    username: 'Kalle Käyttäjä',
+    name: 'Maria Tavis',
+    adult: true,
+    password: 'IloveDogs',
+    __v: 0
+  },
+  { 
+    _id: "5a422aa71b54a676234d17f8",
+    username: 'japadapaduu',
+    name: 'Eero Neuroottinen',
+    adult: false,
+    password: 'singlelover96',
+    __v: 0
+  }
+]
+
 
 const format = (blog) => ({
     title: blog.title,
@@ -42,11 +62,16 @@ const existingId = async () => {
     return note._id.toString()
   }
   
-  const blogsInDb = async () => {
-    const blogs = await Blog.find({})
-    return blogs.map(format)
-  }
-  
-  module.exports = {
-    initialBlogs, format, existingId, blogsInDb
-  }
+const blogsInDb = async () => {
+  const blogs = await Blog.find({})
+  return blogs
+}
+
+const usersInDb = async () => {
+  const users = await User.find({})
+  return users
+}
+
+module.exports = {
+  initialBlogs, initialUsers, format, existingId, blogsInDb, usersInDb
+}
