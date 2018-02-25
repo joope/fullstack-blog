@@ -1,9 +1,10 @@
-POST http://localhost:3003/api/blogs/ 
+POST http://localhost:3001/api/blogs/ 
 content-type: application/json
 
 {
   "title": "Roopen sekaseikkailut",
   "author": "Roope Reppana",
   "url": "www.urli.fi",
-  "likes": 1
+  "likes": 1,
+  "userId": "5a929db18f3b850874b1d459"
 }
