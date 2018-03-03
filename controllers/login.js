@@ -4,23 +4,32 @@ const loginRouter = require('express').Router()
 const User = require('../models/user')
 
 loginRouter.post('/', async (request, response) => {
-    const { username, password } = request.body
-    const user = await User.findOne({username: username}).select('+passwordHash')
+    try {
+        console.log(request.body)
+        const { username, password } = request.body
+        const user = await User.findOne({username: username}).select('+passwordHash')
 
-    const validPassword = await bcrypt.compare(password, user.passwordHash)
+        if (!user) {
+            return response.status(401).json({ error: 'invalid username or password'})
+        }
+        const validPassword = await bcrypt.compare(password, user.passwordHash)
 
-    if (!(user && validPassword)) {
-        return response.status(401).json({ error: 'invalid username or password'})
+        if (!(user && validPassword)) {
+            return response.status(401).json({ error: 'invalid username or password'})
+        }
+
+        const tokenData = {
+            username: user.username,
+            id: user._id
+        }
+
+        const token = jwt.sign(tokenData, process.env.SECRET)
+
+        response.json({ token, username: user.username, name: user.name })
+    } catch (err) {
+        console.log(err)
+        response.status(500).send({error: 'Something went wrong'})
     }
-
-    const tokenData = {
-        username: user.username,
-        id: user._id
-    }
-
-    const token = jwt.sign(tokenData, process.env.SECRET)
-
-    response.json({ token, username: user.username, name: user.name })
 })
   
 module.exports = loginRouter
