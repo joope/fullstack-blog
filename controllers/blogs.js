@@ -53,8 +53,6 @@ blogsRouter.delete('/:id', async (req, res) => {
       .findById(id)
       .populate('user', {id: 1})
     const decodedToken = await jwt.verify(req.token, process.env.SECRET)
-    console.log(decodedToken)
-    console.log(blog)
     if (!blog.user || blog.user && blog.user._id == decodedToken.id) {
       await Blog.remove({_id: id})
       return res.sendStatus(204);
