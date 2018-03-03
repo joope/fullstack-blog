@@ -49,8 +49,17 @@ blogsRouter.delete('/:id', async (req, res) => {
   const { id } = req.params;
   if (!id) return res.sendStatus(400);
   try {
-    await Blog.remove({_id: id});
-    res.sendStatus(204);
+    const blog = await Blog
+      .findById(id)
+      .populate('user', {id: 1})
+    const decodedToken = await jwt.verify(req.token, process.env.SECRET)
+    console.log(decodedToken)
+    console.log(blog)
+    if (!blog.user || blog.user && blog.user._id == decodedToken.id) {
+      await Blog.remove({_id: id})
+      return res.sendStatus(204);
+    }
+    res.status(401).send({error: 'Ei oikeuksia'})
   } catch (err) {
     console.log(err)
     res.sendStatus(400);
